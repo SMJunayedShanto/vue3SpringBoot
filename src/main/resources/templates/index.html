@@ -1,1 +1,99 @@
-<div>Test</div>
+<html>
+    <head>
+        <script src="js/vue3/vuejs_3.js"></script>
+        <script src="js/jquery/jquery3.6.3.js"></script>
+        <!--<script src="https://unpkg.com/vue@3.2.45/dist/vue.global.js"></script>-->
+    </head>
+    <body>
+    <div class="submit-form" id="app">
+        <div v-if="!submitted">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        required
+                        v-model="employee.name"
+                        name="name"
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="designation">Designation</label>
+                <input
+                        class="form-control"
+                        id="designation"
+                        required
+                        v-model="employee.designation"
+                        name="designation"
+                />
+            </div>
+
+            <button @click="saveEmployee" class="btn btn-success">Submit</button>
+        </div>
+
+        <div v-else>
+            <h4>You submitted successfully!</h4>
+            <button class="btn btn-success" @click="newEmployee">Add</button>
+        </div>
+    </div>
+    </body>
+</html>
+
+
+
+<script type="text/javascript">
+
+    const app = Vue.createApp({
+        /* root component options */
+        data(){
+           return{
+               employee:{
+                   id:null,
+                   name:"",
+                   designation:""
+               },
+               submitted: false
+           }
+        },
+        methods: {
+            saveEmployee() {
+                    var data = {
+                        name: this.employee.name,
+                        nulempId : '1',
+                        designation: this.employee.designation
+                    };
+
+
+                //    $.post({
+                //        data:data},
+                //
+                //    })
+                //         .then(response => {
+                //         this.employee.id = response.data.id;
+                //     console.log(response.data);
+                //     this.submitted = true;
+                // })
+                // .catch(e => {
+                //         console.log(e);
+                // });
+
+                   $.ajax({
+                       url: "/employee/save",
+                       data:data,
+                       type:'POST',
+                       success:function(res){
+                          console.log(res);
+                       }
+                   });
+            },
+
+            newEmployee() {
+                this.submitted = false;
+                this.employee = {};
+            }
+        }
+    });
+    app.mount("#app");
+</script>
